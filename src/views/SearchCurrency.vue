@@ -21,7 +21,7 @@
         </li>
       </ul>
 
-      <PaginationComponent
+      <ComponentPagination
         v-if="pageCount > 1"
         v-model="page"
         :page-count="pageCount"
@@ -47,8 +47,8 @@ import { ref, watch, computed } from 'vue'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
-import CurrencyItem from '@/components/CurrencyItem.vue'
-import PaginationComponent from '@/components/PaginationComponent.vue'
+import CurrencyItem from '@/components/ComponentCurrencyItem.vue'
+import ComponentPagination from '@/components/ComponentPagination.vue'
 import { useCurrencyStore } from '@/stores/currency/currency'
 
 const currencyStore = useCurrencyStore()

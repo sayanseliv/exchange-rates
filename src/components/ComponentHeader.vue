@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
   <header class="header">
     <div class="container header__container">
@@ -19,6 +17,7 @@
     </div>
   </header>
 </template>
+<script setup lang="ts"></script>
 <style scoped>
 .header {
   background-color: var(--white);

@@ -7,16 +7,6 @@ export const useCurrencyStore = defineStore('currency', {
     list: [],
     editedList: {},
   }),
-  getters: {
-    getCurrencyByCC:
-      (state) =>
-      (cc: string): CurrencyItemType | undefined => {
-        if (state.editedList[cc]) return state.editedList[cc]
-
-        return state.list.find((item) => item.cc === cc)
-      },
-  },
-
   actions: {
     async loadByDate(date: string) {
       try {

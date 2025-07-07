@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
-import { useCurrencyStore } from '@/stores/currency/currency.ts'
+import { useCurrencyStore } from '@/stores/currency/currency'
 import { ref, computed, watch } from 'vue'
 
 const route = useRoute()

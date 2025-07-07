@@ -1,11 +1,11 @@
 <template>
-  <ul :class="['pagination', containerClass]" v-if="!noLiSurround">
+  <ul v-if="!noLiSurround" :class="['pagination', containerClass]">
     <li v-if="firstLastButton" :class="[pageClass, firstPageSelected() ? disabledClass : '']">
       <a
-        @click="selectFirstPage"
-        @keyup.enter="selectFirstPage"
         :class="pageLinkClass"
         :tabindex="firstPageSelected() ? -1 : 0"
+        @click="selectFirstPage"
+        @keyup.enter="selectFirstPage"
         v-html="firstButtonText"
       ></a>
     </li>
@@ -15,10 +15,10 @@
       :class="[prevClass, firstPageSelected() ? disabledClass : '']"
     >
       <a
-        @click="prevPage"
-        @keyup.enter="prevPage"
         :class="{ 'pagination-prev-link': true, prevLinkClass }"
         :tabindex="firstPageSelected() ? -1 : 0"
+        @click="prevPage"
+        @keyup.enter="prevPage"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -52,10 +52,10 @@
       <a v-else-if="page.disabled" :class="pageLinkClass" tabindex="0">{{ page.content }}</a>
       <a
         v-else
-        @click="handlePageSelected(page.index + 1)"
-        @keyup.enter="handlePageSelected(page.index + 1)"
         :class="pageLinkClass"
         tabindex="0"
+        @click="handlePageSelected(page.index + 1)"
+        @keyup.enter="handlePageSelected(page.index + 1)"
       >
         {{ page.content }}
       </a>
@@ -66,10 +66,10 @@
       :class="[nextClass, lastPageSelected() ? disabledClass : '']"
     >
       <a
-        @click="nextPage"
-        @keyup.enter="nextPage"
         :class="['pagination-next-link', nextLinkClass]"
         :tabindex="lastPageSelected() ? -1 : 0"
+        @click="nextPage"
+        @keyup.enter="nextPage"
       >
         <span v-if="!hideText">{{ nextText }}</span>
 
@@ -90,30 +90,30 @@
 
     <li v-if="firstLastButton" :class="[pageClass, lastPageSelected() ? disabledClass : '']">
       <a
-        @click="selectLastPage()"
-        @keyup.enter="selectLastPage()"
         :class="pageLinkClass"
         :tabindex="lastPageSelected() ? -1 : 0"
+        @click="selectLastPage()"
+        @keyup.enter="selectLastPage()"
         v-html="lastButtonText"
       />
     </li>
   </ul>
 
-  <div :class="containerClass" v-else>
+  <div v-else :class="containerClass">
     <a
       v-if="firstLastButton"
-      @click="selectFirstPage"
-      @keyup.enter="selectFirstPage"
       :class="[pageLinkClass, firstPageSelected() ? disabledClass : '']"
       tabindex="0"
+      @click="selectFirstPage"
+      @keyup.enter="selectFirstPage"
       v-html="firstButtonText"
     ></a>
     <a
       v-if="!(firstPageSelected() && hidePrevNext)"
-      @click="prevPage"
-      @keyup.enter="prevPage"
       :class="[prevLinkClass, firstPageSelected() ? disabledClass : '']"
       tabindex="0"
+      @click="prevPage"
+      @keyup.enter="prevPage"
       v-html="prevText"
     ></a>
     <template v-for="page in pages">
@@ -133,28 +133,28 @@
       </a>
       <a
         v-else
-        @click="handlePageSelected(page.index + 1)"
-        @keyup.enter="handlePageSelected(page.index + 1)"
         :class="[pageLinkClass, page.selected ? activeClass : '']"
         tabindex="0"
+        @click="handlePageSelected(page.index + 1)"
+        @keyup.enter="handlePageSelected(page.index + 1)"
       >
         {{ page.content }}
       </a>
     </template>
     <a
       v-if="!(lastPageSelected() && hidePrevNext)"
-      @click="nextPage"
-      @keyup.enter="nextPage"
       :class="[nextLinkClass, lastPageSelected() ? disabledClass : '']"
       tabindex="0"
+      @click="nextPage"
+      @keyup.enter="nextPage"
       v-html="nextText"
     ></a>
     <a
       v-if="firstLastButton"
-      @click="selectLastPage"
-      @keyup.enter="selectLastPage"
       :class="[pageLinkClass, lastPageSelected() ? disabledClass : '']"
       tabindex="0"
+      @click="selectLastPage"
+      @keyup.enter="selectLastPage"
       v-html="lastButtonText"
     ></a>
   </div>

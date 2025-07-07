@@ -1,6 +1,10 @@
+<template>
+  <router-link :to="{ name: 'currency-edit', params: { cc: item.cc } }" class="currency-item">
+    <p>{{ item.txt }} — {{ item.rate }}</p>
+    <time>{{ item.exchangedate }}</time>
+  </router-link>
+</template>
 <script setup lang="ts">
-import { defineProps } from 'vue'
-
 const props = defineProps<{
   item: {
     r030: number
@@ -11,13 +15,6 @@ const props = defineProps<{
   }
 }>()
 </script>
-
-<template>
-  <router-link :to="{ name: 'currency-edit', params: { cc: item.cc } }" class="currency-item">
-    <p>{{ item.txt }} — {{ item.rate }}</p>
-    <time>{{ item.exchangedate }}</time>
-  </router-link>
-</template>
 <style scoped>
 .currency-item {
   position: relative;

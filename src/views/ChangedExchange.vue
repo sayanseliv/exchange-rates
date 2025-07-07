@@ -1,8 +1,44 @@
+<template>
+  <main class="changed-exchange">
+    <section class="container">
+      <h1>Змінені курси</h1>
+
+      <label class="changed-exchange__search"
+        ><p>Шукати валюту:</p>
+        <input v-model="searchTerm" type="text" placeholder="Введіть назву валюти"
+      /></label>
+
+      <ul class="changed-exchange__list">
+        <li v-for="item in paginatedList" :key="item.r030">
+          <ComponentCurrencyItem :item="item" />
+        </li>
+      </ul>
+
+      <ComponentPagination
+        v-if="pageCount > 1"
+        v-model="page"
+        :page-count="pageCount"
+        :clickHandler="countHandler"
+        :forcePage="page"
+        :hideText="true"
+        :page-range="3"
+        :container-class="'changed-exchange__pagination'"
+        :page-class="'page-item'"
+        :page-link-class="'page-link-item'"
+        :prev-class="'prev-item'"
+        :prev-link-class="'changed-exchange__prev-link'"
+        :next-class="'next-item'"
+        :next-link-class="'changed-exchange__next-link'"
+        :break-view-link-class="'break-view-link'"
+      />
+    </section>
+  </main>
+</template>
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useCurrencyStore } from '@/stores/currency/currency'
-import CurrencyItem from '@/components/CurrencyItem.vue'
-import PaginationComponent from '@/components/PaginationComponent.vue'
+import ComponentCurrencyItem from '@/components/ComponentCurrencyItem.vue'
+import ComponentPagination from '@/components/ComponentPagination.vue'
 
 const currencyStore = useCurrencyStore()
 
@@ -40,43 +76,6 @@ watch(searchTerm, () => {
   page.value = 1
 })
 </script>
-
-<template>
-  <main class="changed-exchange">
-    <section class="container">
-      <h1>Змінені курси</h1>
-
-      <label class="changed-exchange__search"
-        ><p>Шукати валюту:</p>
-        <input v-model="searchTerm" type="text" placeholder="Введіть назву валюти"
-      /></label>
-
-      <ul class="changed-exchange__list">
-        <li v-for="item in paginatedList" :key="item.r030">
-          <CurrencyItem :item="item" />
-        </li>
-      </ul>
-
-      <PaginationComponent
-        v-if="pageCount > 1"
-        v-model="page"
-        :page-count="pageCount"
-        :clickHandler="countHandler"
-        :forcePage="page"
-        :hideText="true"
-        :page-range="3"
-        :container-class="'changed-exchange__pagination'"
-        :page-class="'page-item'"
-        :page-link-class="'page-link-item'"
-        :prev-class="'prev-item'"
-        :prev-link-class="'changed-exchange__prev-link'"
-        :next-class="'next-item'"
-        :next-link-class="'changed-exchange__next-link'"
-        :break-view-link-class="'break-view-link'"
-      />
-    </section>
-  </main>
-</template>
 <style scoped>
 .changed-exchange {
   padding-block: 2rem;

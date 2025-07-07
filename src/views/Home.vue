@@ -1,7 +1,42 @@
+<template>
+  <main class="home">
+    <section class="container">
+      <h1>Курс Валют на поточний день</h1>
+
+      <label class="home__search"
+        ><p>Шукати валюту:</p>
+        <input v-model="searchTerm" type="text" placeholder="Введіть назву валюти"
+      /></label>
+
+      <ul class="home__list">
+        <li v-for="item in paginatedList" :key="item.r030">
+          <ComponentCurrencyItem :item="item" />
+        </li>
+      </ul>
+      <ComponentPagination
+        v-model="page"
+        v-if="pageCount > 1"
+        :page-count="pageCount"
+        :clickHandler="countHandler"
+        :forcePage="page"
+        :hideText="true"
+        :page-range="3"
+        :container-class="'home__pagination'"
+        :page-class="'page-item'"
+        :page-link-class="'page-link-item'"
+        :prev-class="'prev-item'"
+        :prev-link-class="'home__prev-link'"
+        :next-class="'next-item'"
+        :next-link-class="'home__next-link'"
+        :break-view-link-class="'break-view-link'"
+      />
+    </section>
+  </main>
+</template>
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import CurrencyItem from '@/components/CurrencyItem.vue'
-import PaginationComponent from '@/components/PaginationComponent.vue'
+import ComponentCurrencyItem from '@/components/ComponentCurrencyItem.vue'
+import ComponentPagination from '@/components/ComponentPagination.vue'
 import { useCurrencyStore } from '@/stores/currency/currency'
 
 const currencyStore = useCurrencyStore()
@@ -34,39 +69,6 @@ watch(searchTerm, () => {
 })
 </script>
 
-<template>
-  <main class="home">
-    <section class="container">
-      <h1>Курс Валют на поточний день</h1>
-
-      <label class="home__search"
-        ><p>Шукати валюту:</p>
-        <input v-model="searchTerm" type="text" placeholder="Введіть назву валюти"
-      /></label>
-
-      <ul class="home__list">
-        <li v-for="item in paginatedList" :key="item.r030"><CurrencyItem :item="item" /></li>
-      </ul>
-      <PaginationComponent
-        v-model="page"
-        v-if="pageCount > 1"
-        :page-count="pageCount"
-        :clickHandler="countHandler"
-        :forcePage="page"
-        :hideText="true"
-        :page-range="3"
-        :container-class="'home__pagination'"
-        :page-class="'page-item'"
-        :page-link-class="'page-link-item'"
-        :prev-class="'prev-item'"
-        :prev-link-class="'home__prev-link'"
-        :next-class="'next-item'"
-        :next-link-class="'home__next-link'"
-        :break-view-link-class="'break-view-link'"
-      />
-    </section>
-  </main>
-</template>
 <style scoped>
 .home {
   padding-block: 2rem;
