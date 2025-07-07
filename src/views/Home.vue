@@ -14,8 +14,8 @@
         </li>
       </ul>
       <ComponentPagination
-        v-model="page"
         v-if="pageCount > 1"
+        v-model="page"
         :page-count="pageCount"
         :clickHandler="countHandler"
         :forcePage="page"

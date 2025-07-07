@@ -5,7 +5,7 @@
   </router-link>
 </template>
 <script setup lang="ts">
-const props = defineProps<{
+const { item } = defineProps<{
   item: {
     r030: number
     cc: string
