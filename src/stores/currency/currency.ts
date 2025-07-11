@@ -15,6 +15,7 @@ export const useCurrencyStore = defineStore('currency', {
         console.error('Error while getting exchange rate:', error)
       }
     },
+
     loadEditedFromLocalStorage() {
       const data = localStorage.getItem('edited-currencies')
       this.editedList = data ? JSON.parse(data) : {}

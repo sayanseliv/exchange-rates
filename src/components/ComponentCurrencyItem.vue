@@ -6,12 +6,12 @@
 </template>
 <script setup lang="ts">
 const { item } = defineProps<{
-  item: {
-    r030: number
-    cc: string
-    rate: number
-    txt: string
-    exchangedate: string
+  readonly item: {
+    readonly r030: number
+    readonly cc: string
+    readonly rate: number
+    readonly txt: string
+    readonly exchangedate: string
   }
 }>()
 </script>

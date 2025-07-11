@@ -1,12 +1,14 @@
-import axios from 'axios'
+import { axiosApi } from '@/api/axios-api-config' // ✅ импорт кастомного инстанса
 import type { CurrencyItemType } from './types'
 
-const BASE_URL = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange'
-
 export const CurrencyService = {
-  async fetchByDate(date: string): Promise<CurrencyItemType[]> {
-    const url = `${BASE_URL}?date=${date}&json`
-    const response = await axios.get<CurrencyItemType[]>(url)
+  async fetchByDate(date: string): Promise<readonly CurrencyItemType[]> {
+    const response = await axiosApi.get<readonly CurrencyItemType[]>('/exchange', {
+      params: {
+        date,
+        json: '',
+      },
+    })
     return response.data
   },
 }

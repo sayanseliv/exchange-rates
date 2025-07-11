@@ -1,12 +1,12 @@
 export interface CurrencyItemType {
-  r030: number
-  txt: string
-  rate: number
-  cc: string
-  exchangedate: string
+  readonly r030: number
+  readonly txt: string
+  readonly rate: number
+  readonly cc: string
+  readonly exchangedate: string
 }
 
 export interface CurrencyState {
-  list: CurrencyItemType[]
+  list: readonly CurrencyItemType[]
   editedList: Record<string, CurrencyItemType>
 }

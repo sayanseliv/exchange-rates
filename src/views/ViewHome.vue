@@ -16,9 +16,9 @@
       <ComponentPagination
         v-if="pageCount > 1"
         v-model="page"
+        :force-page="page"
         :page-count="pageCount"
-        :clickHandler="countHandler"
-        :forcePage="page"
+        :click-handler="countHandler"
         :hideText="true"
         :page-range="3"
         :container-class="'home__pagination'"
