@@ -160,228 +160,184 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    value: {
-      type: Number,
-    },
-    pageCount: {
-      type: Number,
-      required: true,
-    },
-    forcePage: {
-      type: Number,
-    },
-    clickHandler: {
-      type: Function,
-      default: () => {},
-    },
-    pageRange: {
-      type: Number,
-      default: 3,
-    },
-    marginPages: {
-      type: Number,
-      default: 1,
-    },
-    prevText: {
-      type: String,
-      default: 'Prev',
-    },
-    nextText: {
-      type: String,
-      default: 'Next',
-    },
-    breakViewText: {
-      type: String,
-      default: '…',
-    },
-    containerClass: {
-      type: String,
-    },
-    pageClass: {
-      type: String,
-    },
-    pageLinkClass: {
-      type: String,
-    },
-    prevClass: {
-      type: String,
-    },
-    prevLinkClass: {
-      type: String,
-    },
-    nextClass: {
-      type: String,
-    },
-    nextLinkClass: {
-      type: String,
-    },
-    breakViewClass: {
-      type: String,
-    },
-    breakViewLinkClass: {
-      type: String,
-    },
-    activeClass: {
-      type: String,
-      default: 'active',
-    },
-    disabledClass: {
-      type: String,
-      default: 'disabled',
-    },
-    noLiSurround: {
-      type: Boolean,
-      default: false,
-    },
-    firstLastButton: {
-      type: Boolean,
-      default: false,
-    },
-    firstButtonText: {
-      type: String,
-      default: 'First',
-    },
-    lastButtonText: {
-      type: String,
-      default: 'Last',
-    },
-    hidePrevNext: {
-      type: Boolean,
-      default: false,
-    },
-    hideText: { type: Boolean, default: false },
-  },
-  beforeUpdate() {
-    if (this.forcePage === undefined) return
-    if (this.forcePage !== this.selected) {
-      this.selected = this.forcePage
-    }
-  },
-  computed: {
-    selected: {
-      get: function () {
-        return this.value || this.innerValue
-      },
-      set: function (newValue) {
-        this.innerValue = newValue
-      },
-    },
-    pages: function () {
-      let items = {}
-      if (this.pageCount <= this.pageRange) {
-        for (let index = 0; index < this.pageCount; index++) {
-          let page = {
-            index: index,
-            content: index + 1,
-            selected: index === this.selected - 1,
-          }
-          items[index] = page
-        }
-      } else {
-        const halfPageRange = Math.floor(this.pageRange / 2)
-
-        let setPageItem = (index) => {
-          let page = {
-            index: index,
-            content: index + 1,
-            selected: index === this.selected - 1,
-          }
-
-          items[index] = page
-        }
-
-        let setBreakView = (index) => {
-          let breakView = {
-            disabled: true,
-            breakView: true,
-          }
-
-          items[index] = breakView
-        }
-
-        // 1st - loop thru low end of margin pages
-        for (let i = 0; i < this.marginPages; i++) {
-          setPageItem(i)
-        }
-
-        // 2nd - loop thru selected range
-        let selectedRangeLow = 0
-        if (this.selected - halfPageRange > 0) {
-          selectedRangeLow = this.selected - 1 - halfPageRange
-        }
-
-        let selectedRangeHigh = selectedRangeLow + this.pageRange - 1
-        if (selectedRangeHigh >= this.pageCount) {
-          selectedRangeHigh = this.pageCount - 1
-          selectedRangeLow = selectedRangeHigh - this.pageRange + 1
-        }
-
-        for (let i = selectedRangeLow; i <= selectedRangeHigh && i <= this.pageCount - 1; i++) {
-          setPageItem(i)
-        }
-
-        // Check if there is breakView in the left of selected range
-        if (selectedRangeLow > this.marginPages) {
-          setBreakView(selectedRangeLow - 1)
-        }
-
-        // Check if there is breakView in the right of selected range
-        if (selectedRangeHigh + 1 < this.pageCount - this.marginPages) {
-          setBreakView(selectedRangeHigh + 1)
-        }
-
-        // 3rd - loop thru high end of margin pages
-        for (let i = this.pageCount - 1; i >= this.pageCount - this.marginPages; i--) {
-          setPageItem(i)
-        }
-      }
-      return items
-    },
-  },
-  data() {
-    return {
-      innerValue: 1,
-    }
-  },
-  methods: {
-    handlePageSelected(selected) {
-      if (this.selected === selected) return
-
-      this.innerValue = selected
-      this.$emit('input', selected)
-      this.clickHandler(selected)
-    },
-    prevPage() {
-      if (this.selected <= 1) return
-
-      this.handlePageSelected(this.selected - 1)
-    },
-    nextPage() {
-      if (this.selected >= this.pageCount) return
-
-      this.handlePageSelected(this.selected + 1)
-    },
-    firstPageSelected() {
-      return this.selected === 1
-    },
-    lastPageSelected() {
-      return this.selected === this.pageCount || this.pageCount === 0
-    },
-    selectFirstPage() {
-      if (this.selected <= 1) return
-
-      this.handlePageSelected(1)
-    },
-    selectLastPage() {
-      if (this.selected >= this.pageCount) return
-
-      this.handlePageSelected(this.pageCount)
-    },
-  },
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+interface PageItem {
+  readonly index?: number
+  readonly content?: number
+  readonly selected?: boolean
+  readonly disabled?: boolean
+  readonly breakView?: boolean
 }
+const props = withDefaults(
+  defineProps<{
+    readonly value?: number
+    readonly pageCount: number
+    readonly forcePage?: number
+    readonly clickHandler?: (val: number) => void
+    readonly pageRange?: number
+    readonly marginPages?: number
+    readonly prevText?: string
+    readonly nextText?: string
+    readonly breakViewText?: string
+    readonly containerClass?: string
+    readonly pageClass?: string
+    readonly pageLinkClass?: string
+    readonly prevClass?: string
+    readonly prevLinkClass?: string
+    readonly nextClass?: string
+    readonly nextLinkClass?: string
+    readonly breakViewClass?: string
+    readonly breakViewLinkClass?: string
+    readonly activeClass?: string
+    readonly disabledClass?: string
+    readonly noLiSurround?: boolean
+    readonly firstLastButton?: boolean
+    readonly firstButtonText?: string
+    readonly lastButtonText?: string
+    readonly hidePrevNext?: boolean
+    readonly hideText?: boolean
+  }>(),
+  {
+    clickHandler: () => {},
+    pageRange: 3,
+    marginPages: 1,
+    prevText: 'Prev',
+    nextText: 'Next',
+    breakViewText: '…',
+    activeClass: 'active',
+    disabledClass: 'disabled',
+    noLiSurround: false,
+    firstLastButton: false,
+    firstButtonText: 'First',
+    lastButtonText: 'Last',
+    hidePrevNext: false,
+    hideText: false,
+  },
+)
+
+const emit = defineEmits<{
+  (e: 'input', value: number): void
+}>()
+
+const innerValue = ref<number>(props.value ?? 1)
+
+watch(
+  () => props.forcePage,
+  (newVal) => {
+    if (newVal !== undefined && newVal !== selected.value) {
+      innerValue.value = newVal
+    }
+  },
+)
+
+const selected = computed<number>({
+  get: () => props.value ?? innerValue.value,
+  set: (val: number) => {
+    innerValue.value = val
+  },
+})
+
+const handlePageSelected = (val: number) => {
+  if (selected.value === val) return
+  selected.value = val
+  emit('input', val)
+  props.clickHandler?.(val)
+}
+
+const prevPage = () => {
+  if (selected.value <= 1) return
+  handlePageSelected(selected.value - 1)
+}
+
+const nextPage = () => {
+  if (selected.value >= props.pageCount) return
+  handlePageSelected(selected.value + 1)
+}
+
+const firstPageSelected = () => selected.value === 1
+const lastPageSelected = () => selected.value === props.pageCount || props.pageCount === 0
+
+const selectFirstPage = () => {
+  if (selected.value <= 1) return
+  handlePageSelected(1)
+}
+
+const selectLastPage = () => {
+  if (selected.value >= props.pageCount) return
+  handlePageSelected(props.pageCount)
+}
+
+const pages = computed<Record<number, PageItem>>(() => {
+  const createPage = (index: number): PageItem => ({
+    index,
+    content: index + 1,
+    selected: index === selected.value - 1,
+  })
+
+  const createBreak = (): PageItem => ({
+    breakView: true,
+    disabled: true,
+  })
+
+  const range = props.pageRange
+  const margin = props.marginPages
+  const half = Math.floor(range / 2)
+
+  if (props.pageCount <= range) {
+    const entries = Array.from({ length: props.pageCount }, (_, i): readonly [number, PageItem] => [
+      i,
+      createPage(i),
+    ])
+
+    return Object.fromEntries(entries)
+  }
+  // eslint-disable-next-line functional/no-let
+  let selectedRangeLow = Math.max(selected.value - 1 - half, 0)
+  // eslint-disable-next-line functional/no-let
+  let selectedRangeHigh = selectedRangeLow + range - 1
+
+  if (selectedRangeHigh >= props.pageCount) {
+    selectedRangeHigh = props.pageCount - 1
+    selectedRangeLow = selectedRangeHigh - range + 1
+  }
+
+  const marginStart = Array.from({ length: margin }, (_, i): readonly [number, PageItem] => [
+    i,
+    createPage(i),
+  ])
+
+  const breakBefore =
+    selectedRangeLow > margin ? [[selectedRangeLow - 1, createBreak()] as const] : []
+
+  const selectedRange = Array.from(
+    { length: selectedRangeHigh - selectedRangeLow + 1 },
+    (_, i): readonly [number, PageItem] => {
+      const pageIndex = selectedRangeLow + i
+      return [pageIndex, createPage(pageIndex)]
+    },
+  )
+
+  const breakAfter =
+    selectedRangeHigh + 1 < props.pageCount - margin
+      ? [[selectedRangeHigh + 1, createBreak()] as const]
+      : []
+
+  const marginEnd = Array.from({ length: margin }, (_, i): readonly [number, PageItem] => {
+    const index = props.pageCount - margin + i
+    return [index, createPage(index)]
+  })
+
+  const entries: ReadonlyArray<readonly [number, PageItem]> = [
+    ...marginStart,
+    ...breakBefore,
+    ...selectedRange,
+    ...breakAfter,
+    ...marginEnd,
+  ]
+
+  return Object.fromEntries(entries)
+})
 </script>
 
 <style scoped>
