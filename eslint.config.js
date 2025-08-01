@@ -34,7 +34,7 @@ export default [
       '@typescript-eslint/no-unused-vars': 'warn',
       'vue/attributes-order': 'warn',
 
-      // ⚙️ Functional programming rules (по умолчанию строгие)
+      // ⚙️ Functional programming rules
       'functional/no-let': 'error',
       'functional/prefer-readonly-type': 'warn',
       'functional/immutable-data': [

@@ -163,7 +163,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 interface PageItem {
-  readonly index?: number
+  readonly index: number
   readonly content?: number
   readonly selected?: boolean
   readonly disabled?: boolean
@@ -275,10 +275,7 @@ const pages = computed<Record<number, PageItem>>(() => {
     selected: index === selected.value - 1,
   })
 
-  const createBreak = (): PageItem => ({
-    breakView: true,
-    disabled: true,
-  })
+  const createBreak = (index: number): PageItem => ({ index, breakView: true, disabled: true })
 
   const range = props.pageRange
   const margin = props.marginPages
@@ -308,7 +305,9 @@ const pages = computed<Record<number, PageItem>>(() => {
   ])
 
   const breakBefore =
-    selectedRangeLow > margin ? [[selectedRangeLow - 1, createBreak()] as const] : []
+    selectedRangeLow > margin
+      ? [[selectedRangeLow - 1, createBreak(selectedRangeLow - 1)] as const]
+      : []
 
   const selectedRange = Array.from(
     { length: selectedRangeHigh - selectedRangeLow + 1 },
@@ -320,7 +319,7 @@ const pages = computed<Record<number, PageItem>>(() => {
 
   const breakAfter =
     selectedRangeHigh + 1 < props.pageCount - margin
-      ? [[selectedRangeHigh + 1, createBreak()] as const]
+      ? [[selectedRangeHigh + 1, createBreak(selectedRangeHigh + 1)] as const]
       : []
 
   const marginEnd = Array.from({ length: margin }, (_, i): readonly [number, PageItem] => {
