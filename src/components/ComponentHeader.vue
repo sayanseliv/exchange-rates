@@ -13,11 +13,25 @@
         <RouterLink to="/">Домашня</RouterLink>
         <RouterLink to="/changed-exchange">Змінені курси</RouterLink>
         <RouterLink to="/search-currency">Пошук курсу</RouterLink>
+        <button class="btn btn-outline-dark" @click="toggleTheme">
+          <i :class="themeIconClass"></i>
+        </button>
       </nav>
     </div>
   </header>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const emit = defineEmits<{
+  (e: 'toggle-theme'): void
+}>()
+const props = defineProps<{ theme: 'light' | 'dark' }>()
+const themeIconClass = computed(() =>
+  props.theme === 'light' ? 'bi bi-moon-fill' : 'bi bi-sun-fill',
+)
+const toggleTheme = () => emit('toggle-theme')
+</script>
 <style scoped>
 .header {
   background-color: var(--white);

@@ -3,7 +3,7 @@ import ViewHome from '../views/ViewHome.vue'
 import ViewCurrencyEdit from '../views/ViewCurrencyEdit.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.VITE_BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
